@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenerife SBK - Soirées Salsa, Bachata et Kizomba</title>
+    <style>
+        body {
+            background-color: #f39c12;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .main-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #c0392b;
+            text-align: center;
+            font-size: 28px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .banner-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .btn-yellow {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #f1c40f;
+            color: #000;
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #d4ac0d;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-yellow:hover {
+            background-color: #f39c12;
+        }
+        .geo-status {
+            background-color: #e8f8f5;
+            border: 1px solid #1abc9c;
+            color: #0e6251;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        .section-title {
+            font-size: 20px;
+            color: #1b4f72;
+            border-bottom: 2px solid #1b4f72;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .city-list {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .city-list a {
+            color: #1b4f72;
+            text-decoration: underline;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .date-bar {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 10px 0;
+            margin-bottom: 15px;
+        }
+        .date-chip {
+            background-color: #eaecee;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .date-chip.active {
+            background-color: #c0392b;
+            color: white;
+            font-weight: bold;
+        }
+        .event-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+        }
+        .event-date-badge {
+            background-color: #c0392b;
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+        .distance-badge {
+            background-color: #2980b9;
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            border-radius: 3px;
+            margin-right: 4px;
+        }
+        .bg-salsa { background-color: #d35400; }
+        .bg-bachata { background-color: #e67e22; }
+        .bg-kizomba { background-color: #8e44ad; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 12px;
+            font-weight: normal;
+        }
+        .footer-pro {
+            background-color: #f9e79f;
+            border: 1px dashed #d4ac0d;
+            padding: 15px;
+            text-align: center;
+            border-radius: 6px;
+            margin-top: 30px;
+        }
+        .commission-box {
+            background-color: #fef9e7;
+            border: 1px solid #f1c40f;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <h1>Tenerife SBK</h1>
+    
+    <img src="https://images.unsplash.com/photo-1545959578-77227e222949?auto=format&fit=crop&w=800&q=80" alt="Danseurs Salsa Bachata Kizomba" class="banner-img">
+
+    <button onclick="activerGeoloc()" class="btn-yellow">📍 Me géolocaliser autour de moi</button>
+    <div id="geo-status" class="geo-status"></div>
+
+    <button onclick="ouvrirModalPro()" class="btn-yellow">➕ Pro : Ajouter une soirée (En direct)</button>
+
+    <div class="date-bar" id="date-bar">
+        <div class="date-chip active" onclick="filtrerJour(this, 'Tous')">Toutes les dates</div>
+        <div class="date-chip" onclick="filtrerJour(this, 'Vendredi')">Vendredi 13</div>
+        <div class="date-chip" onclick="filtrerJour(this, 'Samedi')">Samedi 14</div>
+        <div class="date-chip" onclick="filtrerJour(this, 'Dimanche')">Dimanche 15</div>
+    </div>
+
+    <div class="section-title">🌴 Filtrer par secteur</div>
+    <div class="city-list">
+        <a onclick="filtrerVille('Toutes')">Tout voir</a> | 
+        <a onclick="filtrerVille('Playa de las Américas')">Playa de las Américas</a> | 
+        <a onclick="filtrerVille('Costa Adeje')">Costa Adeje</a> | 
+        <a onclick="filtrerVille('Santa Cruz')">Santa Cruz</a> | 
+        <a onclick="filtrerVille('Puerto de la Cruz')">Puerto de la Cruz</a>
+    </div>
+
+    <div class="section-title">📅 Agenda des Soirées en direct</div>
+    <div id="events-container">
+        <p style="text-align:center; color:#666;">Chargement des soirées en direct...</p>
+    </div>
+
+    <div id="ajout" class="footer-pro">
+        <h3 style="color: #900C3F; margin-top: 0;">Professionnels et organisateurs</h3>
+        <p style="font-size: 14px;">Publiez vos soirées visibles instantanément par tous les danseurs de Tenerife.</p>
+        <button onclick="ouvrirModalPro()" class="btn-yellow">Publier une soirée</button>
+    </div>
+</div>
+
+<!-- MODALE BILLETTERIE -->
+<div id="ticket-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="fermerModal('ticket-modal')">&times;</span>
+        <h2 style="color: #c0392b; margin-top: 0;" id="modal-event-title">Réservation</h2>
+        <p id="modal-event-info" style="font-size: 14px; color: #555;"></p>
+        
+        <div class="form-group">
+            <label>Nombre de places :</label>
+            <input type="number" id="ticket-qty" value="1" min="1" max="10" onchange="calculerTotal()">
+        </div>
+
+        <div class="form-group">
+            <label>Votre Nom / Prénom :</label>
+            <input type="text" id="buyer-name" placeholder="Ex: Marc Dupont">
+        </div>
+
+        <div class="commission-box" id="price-breakdown"></div>
+
+        <button onclick="validerAchat()" class="btn-yellow">💳 Simuler le paiement et valider</button>
+    </div>
+</div>
+
+<!-- MODALE AJOUT PRO -->
+<div id="pro-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="fermerModal('pro-modal')">&times;</span>
+        <h2 style="color: #1b4f72; margin-top: 0;">Ajouter une soirée (En direct)</h2>
+
+        <div class="form-group">
+            <label>Nom de la soirée / Lieu *</label>
+            <input type="text" id="pro-title" placeholder="Ex: Soirée Salsa au Papagayo" required>
+        </div>
+
+        <div class="form-group">
+            <label>Ville / Secteur *</label>
+            <select id="pro-city">
+                <option value="Playa de las Américas">Playa de las Américas (Sud)</option>
+                <option value="Costa Adeje">Costa Adeje (Sud)</option>
+                <option value="Los Cristianos">Los Cristianos (Sud)</option>
+                <option value="El Médano">El Médano (Sud)</option>
+                <option value="Santa Cruz">Santa Cruz de Tenerife (Est)</option>
+                <option value="Puerto de la Cruz">Puerto de la Cruz (Nord)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Date de l'événement *</label>
+            <input type="text" id="pro-date" value="Vendredi 13 novembre 2026">
+        </div>
+
+        <div class="form-group">
+            <label>Horaires *</label>
+            <input type="text" id="pro-hours" value="21h00 → 02h00">
+        </div>
+
+        <div class="form-group">
+            <label>Prix d'entrée en € (0 si gratuit) *</label>
+            <input type="number" id="pro-price" value="10" min="0">
+        </div>
+
+        <div class="form-group checkbox-group">
+            <label style="display:block;">Styles de danse :</label>
+            <label><input type="checkbox" id="style-salsa" checked> Salsa</label>
+            <label><input type="checkbox" id="style-bachata" checked> Bachata</label>
+            <label><input type="checkbox" id="style-kizomba"> Kizomba</label>
+        </div>
+
+        <div class="form-group">
+            <label>Description / Programme</label>
+            <textarea id="pro-desc" rows="2" placeholder="Cours, DJ..."></textarea>
+        </div>
+
+        <button onclick="ajouterSoireeEnLigne()" class="btn-yellow" id="btn-submit-pro">✅ Publier en direct</button>
+    </div>
+</div>
+
+<script>
+    const API_URL = "https://api.npoint.io/b00e8914f6e88830320b";
+
+    const TAUX_COMMISSION = 0.10; 
+    const COORDS_VILLES = {
+        "Playa de las Américas": { lat: 28.0588, lon: -16.7313 },
+        "Costa Adeje": { lat: 28.0815, lon: -16.7350 },
+        "Los Cristianos": { lat: 28.0517, lon: -16.7166 },
+        "El Médano": { lat: 28.0461, lon: -16.5364 },
+        "Santa Cruz": { lat: 28.4636, lon: -16.2518 },
+        "Puerto de la Cruz": { lat: 28.4167, lon: -16.5500 }
+    };
+
+    let soirees = [];
+    let userLat = null;
+    let userLon = null;
+    let currentEvent = null;
+    let filtreVilleActuel = 'Toutes';
+    let filtreJourActuel = 'Tous';
+
+    chargerSoirees();
+
+    async function chargerSoirees() {
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            if (data && data.soirees && data.soirees.length > 0) {
+                soirees = data.soirees;
+            } else {
+                // Auto-initialisation si le stockage est vide
+                soirees = [
+                    {
+                        id: 1,
+                        title: "Soirée Latino SBK au Papagayo",
+                        city: "Playa de las Américas",
+                        date: "Vendredi 13 novembre 2026",
+                        hours: "19h30 → 02h00",
+                        price: 5,
+                        styles: ["Salsa", "Bachata", "Kizomba"],
+                        desc: "Cours de Bachata débutant à 20h00, puis soirée généraliste SBK."
+                    }
+                ];
+                await sauvegarderSurCloud();
+            }
+        } catch (e) {
+            soirees = [];
+        }
+        afficherSoirees();
+    }
+
+    async function sauvegarderSurCloud() {
+        try {
+            await fetch(API_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ soirees: soirees })
+            });
+        } catch (e) {
+            alert("Erreur de synchronisation avec le cloud.");
+        }
+    }
+
+    function afficherSoirees() {
+        const container = document.getElementById('events-container');
+        container.innerHTML = '';
+
+        const listeFiltree = soirees.filter(ev => {
+            const matchVille = (filtreVilleActuel === 'Toutes') || (ev.city === filtreVilleActuel);
+            const matchJour = (filtreJourActuel === 'Tous') || (ev.date.toLowerCase().includes(filtreJourActuel.toLowerCase()));
+            return matchVille && matchJour;
+        });
+
+        if (listeFiltree.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#666;">Aucune soirée trouvée pour ce filtre.</p>';
+            return;
+        }
+
+        listeFiltree.forEach(ev => {
+            let distanceHTML = '';
+            if (userLat && userLon && COORDS_VILLES[ev.city]) {
+                const dist = calculerDistanceKm(userLat, userLon, COORDS_VILLES[ev.city].lat, COORDS_VILLES[ev.city].lon);
+                distanceHTML = `<span class="distance-badge">📍 À ${dist.toFixed(1)} km</span>`;
+            }
+
+            let badgesHTML = '';
+            (ev.styles || []).forEach(style => {
+                let s = style.trim();
+                let classe = 'bg-salsa';
+                if (s === 'Bachata') classe = 'bg-bachata';
+                if (s === 'Kizomba') classe = 'bg-kizomba';
+                badgesHTML += `<span class="badge ${classe}">${s}</span>`;
+            });
+
+            const prixTexte = ev.price > 0 ? `${ev.price} €` : 'Gratuit';
+            const btnTexte = ev.price > 0 ? `🎟️ Acheter mon entrée (${ev.price} €)` : `🎟️ Réserver ma place gratuite`;
+
+            const card = `
+                <div class="event-card">
+                    <div class="event-date-badge">${ev.date}</div>
+                    ${distanceHTML}
+                    <h3 style="margin: 5px 0; font-size: 18px; color: #1b4f72;">${ev.title}</h3>
+                    <p style="margin: 3px 0; font-size: 14px; color: #555;"><i>${ev.city}</i></p>
+                    <p style="margin: 8px 0;">
+                        ${badgesHTML}
+                        <strong>${ev.hours}</strong> | <strong>${prixTexte}</strong>
+                    </p>
+                    <p style="font-size: 14px; margin: 8px 0;">${ev.desc}</p>
+                    <button onclick="ouvrirBilletterie(${ev.id})" class="btn-yellow" style="padding: 8px; font-size: 14px; margin-top: 10px;">${btnTexte}</button>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    }
+
+    async function ajouterSoireeEnLigne() {
+        const title = document.getElementById('pro-title').value.trim();
+        const city = document.getElementById('pro-city').value;
+        const date = document.getElementById('pro-date').value.trim();
+        const hours = document.getElementById('pro-hours').value.trim();
+        const price = parseFloat(document.getElementById('pro-price').value) || 0;
+        const desc = document.getElementById('pro-desc').value.trim();
+
+        const stylesArr = [];
+        if (document.getElementById('style-salsa').checked) stylesArr.push("Salsa");
+        if (document.getElementById('style-bachata').checked) stylesArr.push("Bachata");
+        if (document.getElementById('style-kizomba').checked) stylesArr.push("Kizomba");
+
+        if (!title || !date) {
+            alert("Remplis au moins le nom et la date.");
+            return;
+        }
+
+        const nouvelleSoiree = {
+            id: Date.now(),
+            title: title,
+            city: city,
+            date: date,
+            hours: hours,
+            price: price,
+            styles: stylesArr.length > 0 ? stylesArr : ["SBK"],
+            desc: desc || "Soirée danse latine à Tenerife."
+        };
+
+        soirees.unshift(nouvelleSoiree);
+        
+        const btn = document.getElementById('btn-submit-pro');
+        btn.innerText = "⏳ Enregistrement en direct...";
+        btn.disabled = true;
+
+        await sauvegarderSurCloud();
+
+        alert("✅ Soirée publiée ! Elle est maintenant visible sur tous les téléphones du monde entier.");
+        fermerModal('pro-modal');
+        afficherSoirees();
+
+        btn.innerText = "✅ Publier en direct";
+        btn.disabled = false;
+    }
+
+    function activerGeoloc() {
+        const statusDiv = document.getElementById('geo-status');
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '⏳ Recherche GPS...';
+        if (!navigator.geolocation) {
+            statusDiv.innerHTML = '❌ Géolocalisation non supportée.';
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                userLat = pos.coords.latitude;
+                userLon = pos.coords.longitude;
+                statusDiv.innerHTML = `✅ Position trouvée !`;
+                afficherSoirees();
+            },
+            () => { statusDiv.innerHTML = '⚠️ GPS non disponible.'; }
+        );
+    }
+
+    function calculerDistanceKm(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+    }
+
+    function ouvrirBilletterie(id) {
+        currentEvent = soirees.find(e => e.id === id);
+        if (!currentEvent) return;
+        document.getElementById('modal-event-title').innerText = currentEvent.title;
+        document.getElementById('modal-event-info').innerText = `${currentEvent.date} • ${currentEvent.city} (${currentEvent.hours})`;
+        document.getElementById('ticket-qty').value = 1;
+        calculerTotal();
+        document.getElementById('ticket-modal').style.display = 'block';
+    }
+
+    function calculerTotal() {
+        if (!currentEvent) return;
+        const qty = parseInt(document.getElementById('ticket-qty').value) || 1;
+        const prixBase = currentEvent.price * qty;
+        const commission = prixBase * TAUX_COMMISSION;
+        const totalClient = prixBase + commission;
+
+        document.getElementById('price-breakdown').innerHTML = `
+            • Entrées (${qty} x ${currentEvent.price} €) : ${prixBase.toFixed(2)} €<br>
+            • Frais de service (${TAUX_COMMISSION * 100}%) : <strong>${commission.toFixed(2)} €</strong><br>
+            <hr style="margin:6px 0;">
+            <strong>Total à payer : ${totalClient.toFixed(2)} €</strong>
+        `;
+    }
+
+    function validerAchat() {
+        const name = document.getElementById('buyer-name').value.trim();
+        if (!name) { alert("Indique ton nom."); return; }
+        const qty = parseInt(document.getElementById('ticket-qty').value) || 1;
+        const commission = (currentEvent.price * qty * TAUX_COMMISSION).toFixed(2);
+        alert(`✅ Réservation confirmée pour ${name} !\n\n[Ta commission : ${commission} €]`);
+        fermerModal('ticket-modal');
+    }
+
+    function ouvrirModalPro() { document.getElementById('pro-modal').style.display = 'block'; }
+    function fermerModal(id) { document.getElementById(id).style.display = 'none'; }
+    function filtrerVille(ville) { filtreVilleActuel = ville; afficherSoirees(); }
+    function filtrerJour(el, jour) {
+        document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        filtreJourActuel = jour;
+        afficherSoirees();
+    }
+</script>
+
+</body>
+</html>
